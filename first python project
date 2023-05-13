@@ -1,0 +1,28 @@
+import requests
+from bs4 import BeautifulSoup
+
+
+def get_from_wiki():
+  user_input2 = input("Enter: ")
+  user_input = input("Enter: ")
+
+  if user_input2 == 'Korean':
+    url = 'https://ko.wikipedia.org/wiki/' + user_input
+  else:
+    url = 'https://en.wikipedia.org/wiki/' + user_input
+
+  headers = {
+    'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36'
+  }
+  response = requests.get(url, headers)
+  soup = BeautifulSoup(response.text, 'html.parser')
+
+  result = [
+    price.text.strip()
+    for price in soup.findAll("table", {"class": "infobox vcard"})
+  ]
+  print(result)
+
+
+get_from_wiki()
